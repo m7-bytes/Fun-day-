@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Message Viewer</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yes / No — Fun Messages</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="color-scheme" content="light dark" />
 </head>
 <body>
-    <div class="container">
-        <div id="message">Click the arrow to start! ➡</div>
-        <button id="nextBtn">➡</button>
+  <main class="container">
+    <div id="message" aria-live="polite">Click Yes or No to start! 😄</div>
+
+    <div class="button-group" id="btnGroup" aria-label="Choices">
+      <button class="choiceBtn yes" id="yesBtn" aria-label="Yes">Yes ✅</button>
+      <button class="choiceBtn no" id="noBtn" aria-label="No">No ❌</button>
     </div>
 
-    <!-- Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="script.js"></script>
+    <p class="hint">Psst… both buttons go forward 😉</p>
+  </main>
+
+  <!-- Confetti (tiny, dependency-free) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
