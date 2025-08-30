@@ -7,7 +7,10 @@ const messages = [
     "Haha! I was totally going to say blue anyway 💙",
     "Want to try a quick game?",
     "Okay... are you ready?",
-    "Here it comes in 3... 2... 1...",
+    "Here it comes...",
+    "3️⃣",
+    "2️⃣",
+    "1️⃣",
     "SURPRISE! 🎉 You’re awesome!",
     "Seriously, you made it this far... respect ✊",
     "Now for the final question...",
@@ -16,7 +19,6 @@ const messages = [
 ];
 
 let currentMessage = 0;
-let isFinal = false;
 
 const messageElement = document.getElementById("message");
 const yesBtn = document.getElementById("yesBtn");
@@ -40,7 +42,11 @@ function typeMessage(text, callback) {
 function nextMessage() {
     currentMessage++;
     if (currentMessage < messages.length - 1) {
-        typeMessage(messages[currentMessage]);
+        typeMessage(messages[currentMessage], () => {
+            if (messages[currentMessage] === "Here it comes...") {
+                setTimeout(() => nextMessage(), 500);
+            }
+        });
         swapButtons();
     } else if (currentMessage === messages.length - 1) {
         finalSpill(messages[currentMessage]);
@@ -64,7 +70,7 @@ function finalSpill(text) {
         const span = document.createElement("span");
         span.className = "letter";
         span.textContent = letter;
-        span.style.left = `${centerX - (text.length*10)/2 + index * 20}px`;
+        span.style.left = `${centerX - (text.length*10)/2 + index * 22}px`;
         span.style.top = `${centerY}px`;
         span.style.setProperty("--rot", `${Math.random() * 60 - 30}deg`);
 
@@ -73,7 +79,7 @@ function finalSpill(text) {
         setTimeout(() => {
             const randomX = Math.random() * window.innerWidth;
             span.style.transition = "transform 2s ease-in, top 2s ease-in, left 2s ease-in";
-            span.style.top = `${window.innerHeight - 40}px`;
+            span.style.top = `${window.innerHeight - 50}px`;
             span.style.left = `${randomX}px`;
         }, index * 100);
     });
