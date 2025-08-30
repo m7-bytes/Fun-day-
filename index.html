@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yes / No — Fun Messages</title>
-  <link rel="stylesheet" href="style.css" />
-  <meta name="color-scheme" content="light dark" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Yes/No Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="container">
-    <div id="message" aria-live="polite">Click Yes or No to start! 😄</div>
-
-    <div class="button-group" id="btnGroup" aria-label="Choices">
-      <button class="choiceBtn yes" id="yesBtn" aria-label="Yes">Yes ✅</button>
-      <button class="choiceBtn no" id="noBtn" aria-label="No">No ❌</button>
+    <div class="container">
+        <div id="message"></div>
+        <div class="button-group">
+            <button class="choiceBtn" id="yesBtn">Yes ✅</button>
+            <button class="choiceBtn" id="noBtn">No ❌</button>
+        </div>
     </div>
 
-    <p class="hint">Psst… both buttons go forward 😉</p>
-  </main>
-
-  <!-- Confetti (tiny, dependency-free) -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
