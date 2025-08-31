@@ -1,92 +1,123 @@
 const messages = [
-    "Hey 👋 Can I ask you something?",
-    "Promise you’ll answer honestly? 🤨",
+    "Hey there! 👋 Ready for something fun?",
     "Do you like surprises? 🎁",
-    "Good... because this is going to be fun 😏",
-    "Do you think I can guess your favorite color? 🎨",
-    "Haha! I was totally going to say blue anyway 💙",
-    "Want to try a quick game?",
-    "Okay... are you ready?",
-    "Here it comes...",
-    "3️⃣",
-    "2️⃣",
-    "1️⃣",
-    "SURPRISE! 🎉 You’re awesome!",
-    "Seriously, you made it this far... respect ✊",
-    "Now for the final question...",
-    "Do you want to see something super cool? 🤯",
-    "YOU WON 🎊"
+    "Would you click Yes if I asked nicely? 😏",
+    "Are you still with me?",
+    "Quick! Count backwards: 3... 2... 1...",
+    "Final question... ready?",
+    "Here comes the grand finale 💧"
 ];
 
 let currentMessage = 0;
+let noClicks = 0;
 
-const messageElement = document.getElementById("message");
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
+const messageEl = document.getElementById('message');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
 
 function typeMessage(text, callback) {
     let i = 0;
-    messageElement.textContent = "";
-    function typing() {
+    messageEl.innerHTML = "";
+    function type() {
         if (i < text.length) {
-            messageElement.textContent += text.charAt(i);
+            messageEl.innerHTML += text[i];
             i++;
-            setTimeout(typing, 50);
+            setTimeout(type, 50);
         } else if (callback) {
             callback();
         }
     }
-    typing();
+    type();
 }
 
 function nextMessage() {
-    currentMessage++;
-    if (currentMessage < messages.length - 1) {
+    if (currentMessage < messages.length) {
         typeMessage(messages[currentMessage], () => {
-            if (messages[currentMessage] === "Here it comes...") {
-                setTimeout(() => nextMessage(), 500);
+            if (currentMessage === messages.length - 1) {
+                setTimeout(spillLetters, 1000);
             }
         });
-        swapButtons();
-    } else if (currentMessage === messages.length - 1) {
-        finalSpill(messages[currentMessage]);
+        changeBackground();
+        currentMessage++;
     }
 }
 
-function swapButtons() {
-    if (Math.random() > 0.5) {
-        yesBtn.parentNode.insertBefore(noBtn, yesBtn);
-    } else {
-        yesBtn.parentNode.insertBefore(yesBtn, noBtn);
-    }
+function changeBackground() {
+    const colors = [
+        "#ff9a9e,#fad0c4",
+        "#a18cd1,#fbc2eb",
+        "#fad0c4,#ffd1ff",
+        "#ffecd2,#fcb69f",
+        "#ffdde1,#ee9ca7"
+    ];
+    let bg = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.background = `linear-gradient(135deg, ${bg})`;
 }
 
-function finalSpill(text) {
-    messageElement.textContent = "";
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+function floatingEmoji() {
+    const emojiList = ["🎉","😂","😍","😏","💖","✨","💦","🔥","🥳","🫧"];
+    const emoji = document.createElement('div');
+    emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+    emoji.style.position = 'absolute';
+    emoji.style.left = Math.random() * window.innerWidth + "px";
+    emoji.style.top = window.innerHeight + "px";
+    emoji.style.fontSize = "2rem";
+    document.body.appendChild(emoji);
 
-    [...text].forEach((letter, index) => {
-        const span = document.createElement("span");
-        span.className = "letter";
-        span.textContent = letter;
-        span.style.left = `${centerX - (text.length*10)/2 + index * 22}px`;
-        span.style.top = `${centerY}px`;
-        span.style.setProperty("--rot", `${Math.random() * 60 - 30}deg`);
+    let pos = window.innerHeight;
+    const move = setInterval(() => {
+        pos -= 3;
+        emoji.style.top = pos + "px";
+        if (pos < -50) {
+            emoji.remove();
+            clearInterval(move);
+        }
+    }, 16);
+}
 
-        document.body.appendChild(span);
+function spillLetters() {
+    const finalText = messages[messages.length - 1];
+    messageEl.innerHTML = "";
+    for (let char of finalText) {
+        const letter = document.createElement('div');
+        letter.classList.add('falling-letter');
+        letter.textContent = char;
+        letter.style.left = Math.random() * window.innerWidth + "px";
+        letter.style.color = `hsl(${Math.random()*360}, 80%, 70%)`;
+        letter.style.transform = `rotate(${Math.random()*60 - 30}deg)`;
+        document.body.appendChild(letter);
 
         setTimeout(() => {
-            const randomX = Math.random() * window.innerWidth;
-            span.style.transition = "transform 2s ease-in, top 2s ease-in, left 2s ease-in";
-            span.style.top = `${window.innerHeight - 50}px`;
-            span.style.left = `${randomX}px`;
-        }, index * 100);
-    });
+            letter.style.top = (window.innerHeight - 60) + "px";
+            createRipple(letter.style.left);
+        }, Math.random() * 500);
+    }
 }
 
-yesBtn.addEventListener("click", nextMessage);
-noBtn.addEventListener("click", nextMessage);
+function createRipple(x) {
+    const ripple = document.createElement('div');
+    ripple.classList.add('ripple');
+    ripple.style.left = x;
+    ripple.style.top = (window.innerHeight - 50) + "px";
+    ripple.style.width = "20px";
+    ripple.style.height = "20px";
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+}
 
-// Show first message instantly
-typeMessage(messages[currentMessage]);
+yesBtn.addEventListener('click', () => {
+    floatingEmoji();
+    nextMessage();
+});
+
+noBtn.addEventListener('click', () => {
+    noClicks++;
+    floatingEmoji();
+    if (noClicks === 3) {
+        alert("😏 You like saying No… but it won't change anything!");
+    }
+    nextMessage();
+});
+
+// Start game
+nextMessage();
