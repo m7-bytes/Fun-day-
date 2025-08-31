@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Yes/No Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fun Yes/No Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="app">
+    <header id="card">
+      <div id="message" aria-live="polite"></div>
 
-<div id="game-container">
-    <div id="message"></div>
-    <button class="btn" id="yesBtn">Yes</button>
-    <button class="btn" id="noBtn">No</button>
-</div>
+      <div id="controls">
+        <button id="yesBtn" class="choice">Yes</button>
+        <button id="noBtn"  class="choice">No</button>
+      </div>
+      <div id="hint">Psst — both lead forward. Try clicking!</div>
+    </header>
+  </div>
 
-<script src="script.js"></script>
+  <!-- confetti lib (small, dependency-free) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <canvas id="rippleCanvas"></canvas>
+  <script src="script.js"></script>
 </body>
 </html>
