@@ -15,7 +15,7 @@ const SETTINGS = {
    Keep conversational flow so each step feels connected.
    ================================ */
 const messages = [
-  "Hey 👋 Can I ask you something?",
+  "Hey Sana 👋 Can I ask you something?",
   "Promise you'll answer honestly? 🤨",
   "Do you like surprises? 🎁",
   "Good... because this will be fun 😏",
@@ -28,7 +28,7 @@ const messages = [
   "Seriously, you made it this far... respect ✊",
   "Final question incoming...",
   "Do you want to see the grand finale? 🤯",
-  "YOU WON 🎊" // final/trigger the spill
+  "YOU SUCCESSFULLY WASTED 90 SECONDS 🎊" // final/trigger the spill
 ];
 
 /* ================================
