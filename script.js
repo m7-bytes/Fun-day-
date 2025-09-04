@@ -5,7 +5,8 @@ const messages = [
     "Are you still with me?",
     "Quick! Count backwards: 3... 2... 1...",
     "Final question... ready?",
-    "Your Successfully wasted 30 seconds on this stupid page 🤓"
+    "Here comes the grand finale 💦",
+    "You Successfully wasted 30 seconds on this stupid page 🤪"
 ];
 
 let currentMessage = 0;
@@ -15,7 +16,6 @@ const messageEl = document.getElementById('message');
 const yesBtn = document.getElementById('yesBtn');
 const noBtn = document.getElementById('noBtn');
 const popup = document.getElementById('popup');
-const popupClose = document.getElementById('popup-close');
 
 function typeMessage(text, callback) {
     let i = 0;
@@ -24,7 +24,7 @@ function typeMessage(text, callback) {
         if (i < text.length) {
             messageEl.innerHTML += text[i];
             i++;
-            setTimeout(type, 50);
+            setTimeout(type, 40);
         } else if (callback) {
             callback();
         }
@@ -43,29 +43,17 @@ function nextMessage() {
     }
 }
 
-function floatingEmoji() {
-    const emojiList = ["🎉","😂","😍","😏","💖","✨","💦","🔥","🥳","🫧"];
-    const emoji = document.createElement('div');
-    emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
-    emoji.style.position = 'absolute';
-    emoji.style.left = Math.random() * window.innerWidth + "px";
-    emoji.style.top = window.innerHeight + "px";
-    emoji.style.fontSize = "2rem";
-    document.body.appendChild(emoji);
-
-    let pos = window.innerHeight;
-    const move = setInterval(() => {
-        pos -= 3;
-        emoji.style.top = pos + "px";
-        if (pos < -50) {
-            emoji.remove();
-            clearInterval(move);
-        }
-    }, 16);
+function showPopup() {
+    popup.style.display = "block";
+    popup.style.animation = "slideDown 0.4s ease forwards";
+    setTimeout(() => {
+        popup.style.display = "none";
+        nextMessage();
+    }, 2000);
 }
 
 function spillLetters() {
-    const finalText = "💦 SPLASH 💦";
+    const finalText = "SPLASH!";
     messageEl.innerHTML = "";
     for (let char of finalText) {
         const letter = document.createElement('div');
@@ -74,39 +62,64 @@ function spillLetters() {
         letter.style.left = Math.random() * window.innerWidth + "px";
         letter.style.color = `hsl(${Math.random()*360}, 80%, 70%)`;
         letter.style.top = "-50px";
-        letter.style.transform = `rotate(${Math.random()*60 - 30}deg)`;
         document.body.appendChild(letter);
 
+        let velocity = 3 + Math.random() * 2;
         let y = -50;
+        let gravity = 0.2;
+        let bounce = 0.4;
+        const floor = window.innerHeight - 60;
+
         const fall = setInterval(() => {
-            y += 5;
-            if (y >= window.innerHeight - 60) {
-                y = window.innerHeight - 60;
-                clearInterval(fall);
+            velocity += gravity;
+            y += velocity;
+            if (y >= floor) {
+                velocity *= -bounce;
+                y = floor;
+                if (Math.abs(velocity) < 0.5) {
+                    clearInterval(fall);
+                }
             }
             letter.style.top = y + "px";
         }, 16);
     }
 }
 
+function confettiBurst() {
+    for (let i = 0; i < 15; i++) {
+        const confetti = document.createElement('div');
+        confetti.textContent = "🎉";
+        confetti.style.position = "absolute";
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.top = "-50px";
+        confetti.style.fontSize = "1.5rem";
+        document.body.appendChild(confetti);
+        let y = -50;
+        const drop = setInterval(() => {
+            y += 4;
+            confetti.style.top = y + "px";
+            if (y > window.innerHeight) {
+                confetti.remove();
+                clearInterval(drop);
+            }
+        }, 16);
+    }
+}
+
 yesBtn.addEventListener('click', () => {
-    floatingEmoji();
+    confettiBurst();
+    noClicks = 0;
     nextMessage();
 });
 
 noBtn.addEventListener('click', () => {
     noClicks++;
-    floatingEmoji();
     if (noClicks === 3) {
-        popup.style.display = "flex";
+        noClicks = 0;
+        showPopup();
     } else {
         nextMessage();
     }
-});
-
-popupClose.addEventListener('click', () => {
-    popup.style.display = "none";
-    nextMessage();
 });
 
 // Start game
