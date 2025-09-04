@@ -15,7 +15,7 @@ const SETTINGS = {
    Keep conversational flow so each step feels connected.
    ================================ */
 const messages = [
-  "Hey Sana 👋 Can I ask you something?",
+  "Hey Sana! 👋 Can I ask you something?",
   "Promise you'll answer honestly? 🤨",
   "Do you like surprises? 🎁",
   "Good... because this will be fun 😏",
