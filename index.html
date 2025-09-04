@@ -1,24 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Yes/No Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fun Yes/No Game — Interactive</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="game-container">
-    <div id="message"></div>
-    <button class="btn" id="yesBtn">Yes</button>
-    <button class="btn" id="noBtn">No</button>
-</div>
+  <!-- Main app card -->
+  <div id="app">
+    <div id="card">
+      <div id="message" aria-live="polite"></div>
 
-<!-- iPhone style popup -->
-<div id="popup">
-    <p>😏 You keep saying No... but it won't stop me!</p>
-</div>
+      <div id="controls">
+        <button id="yesBtn" class="choice">Yes</button>
+        <button id="noBtn"  class="choice">No</button>
+      </div>
 
-<script src="script.js"></script>
+      <div id="hint">Psst — both choices go forward 😉</div>
+      <div id="musicToggle" title="Toggle background music">🔈</div>
+    </div>
+  </div>
+
+  <!-- iPhone-style "Enter your name" modal -->
+  <div id="nameModal" class="modal">
+    <div class="modal-card">
+      <div class="modal-title">Enter your name</div>
+      <input id="nameInput" placeholder="Your name" type="text" />
+      <div class="modal-actions">
+        <button id="nameStart">Let's go!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- iPhone-style 3-No popup (toast) -->
+  <div id="noPopup" class="no-popup">
+    <div class="no-popup-inner">😏 You keep saying No... but it won't stop the fun!</div>
+  </div>
+
+  <!-- ripple canvas (for finale) -->
+  <canvas id="rippleCanvas"></canvas>
+
+  <!-- confetti lib -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
