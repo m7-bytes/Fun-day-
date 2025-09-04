@@ -1,9 +1,9 @@
 body {
     margin: 0;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(270deg, #1e3c72, #2a5298, #141E30, #243B55);
-    background-size: 800% 800%;
-    animation: bgShift 12s ease infinite;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(270deg, #283048, #859398);
+    background-size: 600% 600%;
+    animation: bgShift 15s ease infinite;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -19,23 +19,28 @@ body {
 
 #game-container {
     text-align: center;
-    max-width: 600px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 20px 30px;
+    background: rgba(255,255,255,0.1);
     border-radius: 15px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
 }
 
 #message {
-    font-size: 2rem;
-    color: #fff;
-    text-shadow: 0 0 8px #00f6ff, 0 0 16px #00f6ff;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: white;
     min-height: 60px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .btn {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     padding: 10px 20px;
     margin: 10px;
     border: none;
@@ -45,8 +50,8 @@ body {
 }
 
 .btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px white;
 }
 
 #yesBtn {
@@ -66,63 +71,22 @@ body {
     pointer-events: none;
 }
 
-/* Ripple effect */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    animation: rippleAnim 0.6s forwards;
-    pointer-events: none;
-}
-
-@keyframes rippleAnim {
-    from { transform: scale(0); opacity: 0.8; }
-    to { transform: scale(2); opacity: 0; }
-}
-
-/* Cute Popup */
+/* iPhone-style popup */
 #popup {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
-
-#popup-content {
-    background: #fff;
-    padding: 20px 30px;
-    border-radius: 20px;
-    text-align: center;
-    animation: popupBounce 0.5s ease;
-    box-shadow: 0 0 30px rgba(255, 182, 193, 0.8);
-}
-
-#popup-content p {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-}
-
-#popup-close {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background: #ff66b2;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(50, 50, 50, 0.9);
     color: white;
-    border: none;
+    padding: 12px 20px;
     border-radius: 15px;
-    cursor: pointer;
-    transition: background 0.3s;
+    font-size: 1rem;
+    display: none;
+    animation: slideDown 0.4s ease forwards;
 }
 
-#popup-close:hover {
-    background: #ff3385;
-}
-
-@keyframes popupBounce {
-    0% { transform: scale(0.5); opacity: 0; }
-    60% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); }
+@keyframes slideDown {
+    from { top: -80px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
 }
