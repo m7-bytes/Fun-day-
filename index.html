@@ -1,49 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fun Yes/No Game — Interactive</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Yes/No Game</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Main app card -->
-  <div id="app">
-    <div id="card">
-      <div id="message" aria-live="polite"></div>
-
-      <div id="controls">
-        <button id="yesBtn" class="choice">Yes</button>
-        <button id="noBtn"  class="choice">No</button>
-      </div>
-
-      <div id="hint">Psst — both choices go forward 😉</div>
-      <div id="musicToggle" title="Toggle background music">🔈</div>
-    </div>
+<div id="card">
+  <div id="message"></div>
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
   </div>
+</div>
 
-  <!-- iPhone-style "Enter your name" modal -->
-  <div id="nameModal" class="modal">
-    <div class="modal-card">
-      <div class="modal-title">Enter your name</div>
-      <input id="nameInput" placeholder="Your name" type="text" />
-      <div class="modal-actions">
-        <button id="nameStart">Let's go!</button>
-      </div>
-    </div>
+<!-- Name input modal -->
+<div id="nameModal">
+  <div id="nameModalBox">
+    <p>Enter your name:</p>
+    <input type="text" id="nameInput" placeholder="Your name">
+    <button id="nameStart">Start</button>
   </div>
+</div>
 
-  <!-- iPhone-style 3-No popup (toast) -->
-  <div id="noPopup" class="no-popup">
-    <div class="no-popup-inner">😏 You keep saying No... but it won't stop the fun!</div>
-  </div>
+<!-- iPhone-style No popup -->
+<div id="noPopup">Are you sure? 😏</div>
 
-  <!-- ripple canvas (for finale) -->
-  <canvas id="rippleCanvas"></canvas>
+<!-- Canvas for ripple/final letters -->
+<canvas id="rippleCanvas"></canvas>
 
-  <!-- confetti lib -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
+<button id="musicToggle">🔊</button>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
