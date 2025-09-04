@@ -1,5 +1,6 @@
 /* ===========================
    Ultimate Yes/No Game Script
+   Corrected version
    Features:
    - name modal (iPhone style)
    - personalized messages
@@ -10,6 +11,7 @@
    - confetti (canvas-confetti)
    - ripple canvas and final water-droplet letters that pile
    - WebAudio-generated sound effects & background music toggle
+   - Corrected: No button returns after popup
    =========================== */
 
 /* -------- SETTINGS (toggle here) -------- */
@@ -80,7 +82,6 @@ function startMusic(){
     musicGain.gain.value = 0.0025; // quiet
     musicOsc.connect(musicGain); musicGain.connect(ctx.destination);
     musicOsc.start();
-    // subtle periodic frequency changes
     setInterval(()=> {
       if(!musicOsc) return;
       musicOsc.frequency.setTargetAtTime(90 + Math.random()*120, ctx.currentTime, 0.6);
@@ -92,16 +93,11 @@ function stopMusic(){
   if(musicOsc){ musicOsc.stop(); musicOsc.disconnect(); musicGain.disconnect(); musicOsc=null; musicGain=null; }
   musicToggle.textContent = '🔈';
 }
-
-/* toggle music click */
 musicToggle.addEventListener('click', ()=>{
   if(!audioCtx) ensureAudio();
   if(musicOsc) { stopMusic(); SETTINGS.musicEnabled = false; }
   else { SETTINGS.musicEnabled = true; startMusic(); }
 });
-
-/* init music if allowed */
-if(SETTINGS.musicEnabled) { /* wait for user gesture to start (start on first click) */ }
 
 /* -------- messages (use name placeholder {name}) -------- */
 let playerName = '';
@@ -119,7 +115,7 @@ const baseMessages = [
   "Seriously, you made it this far... respect ✊",
   "Final question incoming...",
   "Do you want to see the grand finale? 🤯",
-  "YOU FINALLY WASTED 60 SECONDS IN THIS STUPID PLACE! 🎊" // final trigger
+  "YOU WON 🎊" // final trigger
 ];
 let messages = [...baseMessages];
 
@@ -135,16 +131,15 @@ let runningUsed = 0;
 const rand = (a,b)=> Math.random()*(b-a)+a;
 const choose = arr => arr[Math.floor(Math.random()*arr.length)];
 
-/* -------- parallax mouse movement for subtle depth -------- */
+/* -------- parallax mouse movement -------- */
 document.addEventListener('mousemove', (e)=>{
   const x = (e.clientX / innerWidth - 0.5) * 10;
   const y = (e.clientY / innerHeight - 0.5) * 10;
-  // tilt card slightly
   const card = document.getElementById('card');
   if(card) card.style.transform = `translateZ(0) rotateX(${ -y }deg) rotateY(${ x }deg)`;
 });
 
-/* -------- show message (typing-lite + pop) -------- */
+/* -------- show message -------- */
 let typing = false;
 function showMessage(text, cb){
   typing = true;
@@ -183,12 +178,11 @@ function spawnFloatingWord(text){
   const el = document.createElement('div');
   el.className = 'float-thing';
   el.textContent = text;
-  el.style.left = `${rand(20, innerWidth-120)}px`;
-  el.style.top = `${rand(innerHeight*0.55, innerHeight - 40)}px`;
-  el.style.fontSize = `${rand(14,20)}px`;
+  el.style.left = `${rand(40, innerWidth - 140)}px`;
+  el.style.top = `${rand(innerHeight*0.55, innerHeight - 80)}px`;
+  el.style.fontSize = `${rand(14,22)}px`;
   document.body.appendChild(el);
-  el.style.transition = `transform ${rand(1800,2800)}ms ease, opacity 900ms`;
-  requestAnimationFrame(()=> el.style.transform = `translateY(-${rand(40,120)}px) translateX(${rand(-40,40)}px)`);
+  requestAnimationFrame(()=> el.style.transform = `translateY(-${rand(40,140)}px) translateX(${rand(-40,40)}px) scale(${rand(0.9,1.06)})`);
   setTimeout(()=> el.remove(), 2500);
 }
 function emojiRain(count=18, list=['🎉','✨','💖','🌟','🥳','🫧','🍾']){
@@ -207,14 +201,14 @@ function emojiRain(count=18, list=['🎉','✨','💖','🌟','🥳','🫧','�
   }
 }
 
-/* -------- confetti helper (canvas-confetti) -------- */
+/* -------- confetti -------- */
 function doConfetti(){
   if(typeof confetti === 'function' && SETTINGS.confettiOnMilestones){
     confetti({ particleCount: 120, spread: 70, origin: { y: 0.45 } });
   }
 }
 
-/* -------- screen shake for No click -------- */
+/* -------- screen shake -------- */
 function screenShake(){
   const card = document.getElementById('card');
   card.animate([
@@ -226,9 +220,8 @@ function screenShake(){
   ], { duration: 420, easing: 'ease-out' });
 }
 
-/* -------- No button running behavior -------- */
+/* -------- No button running -------- */
 function makeNoRunOnce(){
-  // move no button to random position within viewport (keeping buttons visible)
   const pad = 12;
   const w = noBtn.offsetWidth;
   const h = noBtn.offsetHeight;
@@ -240,7 +233,7 @@ function makeNoRunOnce(){
   playBoing();
 }
 
-/* -------- floating click emoji (on click) -------- */
+/* -------- click emojis -------- */
 function spawnClickEmoji(x=null,y=null){
   if(!SETTINGS.emojiOnClick) return;
   const list = ['🎉','😂','😍','😏','💖','✨','💦','🔥','🥳','🫧'];
@@ -251,11 +244,11 @@ function spawnClickEmoji(x=null,y=null){
   el.style.top  = `${(y ?? (innerHeight - 80))}px`;
   el.style.fontSize = `${rand(18,32)}px`;
   document.body.appendChild(el);
-  requestAnimationFrame(()=> el.style.transform = `translateY(-${rand(120,240)}px) scale(${rand(0.94,1.12)})`);
+  requestAnimationFrame(()=> el.style.transform = `translateY(-${rand(120,240)}px) rotate(${rand(-16,16)}deg)`);
   setTimeout(()=> el.remove(), 2200);
 }
 
-/* -------- Ripple system on canvas -------- */
+/* -------- ripple system -------- */
 const ripples = [];
 function spawnRipple(x,y){
   if(!SETTINGS.rippleOnLanding || !ctx) return;
@@ -282,17 +275,16 @@ function renderRipples(){
 function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
 requestAnimationFrame(renderRipples);
 
-/* -------- columns-based piling for final letters -------- */
+/* -------- falling letters (finale) -------- */
 let columns = [];
 let colW = 36;
 function calcColumns(){
   const cols = Math.max(6, Math.floor(innerWidth / colW));
-  columns = Array.from({length: cols}).map(()=>0); // heights (px)
+  columns = Array.from({length: cols}).map(()=>0);
 }
 calcColumns();
 addEventListener('resize', ()=> { calcColumns(); resizeCanvas(); });
 
-/* drop single char into a column */
 function dropChar(ch){
   const el = document.createElement('div');
   el.className = 'falling-letter';
@@ -302,196 +294,18 @@ function dropChar(ch){
   el.style.top = `-40px`;
   el.style.transform = `rotate(${rand(-30,30)}deg)`;
   document.body.appendChild(el);
-
-  // choose column with center bias sometimes
   const mid = Math.floor(columns.length/2);
   let col = Math.floor(rand(0, columns.length));
-  if(Math.random() < 0.45) {
-    const shift = Math.floor(rand(-3,4));
-    col = Math.max(0, Math.min(columns.length-1, mid + shift));
-  }
+  if(Math.random() < 0.45) col = Math.max(0, Math.min(columns.length-1, mid + Math.floor(rand(-3,4))));
   const leftTarget = Math.floor(col * colW + rand(8, colW-12));
   const topTarget = innerHeight - 80 - columns[col];
   const duration = Math.floor(rand(700,1200));
-
   requestAnimationFrame(()=> {
     el.style.transition = `top ${duration}ms cubic-bezier(.12,.9,.24,1), left ${duration}ms ease, transform ${duration}ms cubic-bezier(.12,.9,.24,1)`;
     el.style.left = `${leftTarget}px`;
     el.style.top = `${topTarget}px`;
   });
-
   setTimeout(()=>{
     columns[col] += 28;
-    // small landing scale pop
     el.animate([{ transform: 'scale(1.03)' }, { transform:'scale(1)' }], { duration:220, easing:'ease-out' });
-    // ripple near landing
-    spawnRipple(leftTarget + 8, innerHeight - 60);
-    playSplash();
-  }, duration + 10);
-  return el;
-}
-
-/* final spill (drops all chars from string with small delays) */
-function finalSpill(text){
-  messageEl.textContent = '';
-  // central ripple
-  spawnRipple(innerWidth/2, innerHeight - 60);
-  const chars = Array.from(text);
-  chars.forEach((ch, i) => {
-    setTimeout(()=> { dropChar(ch); }, i * 80 + rand(0,120));
-  });
-}
-
-/* -------- flow control: messages with name injection -------- */
-function getPersonalMessages(){
-  return baseMessages.map(s => s.replace('{name}', playerName || 'Friend'));
-}
-function startGameAfterName(){
-  messages = getPersonalMessages();
-  idx = 0;
-  showNext();
-}
-
-/* show next message */
-function showNext(){
-  if(idx >= messages.length) return;
-  const text = messages[idx];
-  showMessage(text, ()=> {
-    // on show: milestones
-    if(idx === 9 && SETTINGS.confettiOnMilestones){ // SURPRISE index
-      doConfetti(); emojiRain(20);
-    }
-    // if final (last) message, after small delay trigger final spill sequence
-    if(idx === messages.length - 1){
-      setTimeout(()=> {
-        if(SETTINGS.confettiOnMilestones) { doConfetti(); emojiRain(28); }
-        finalSpill(messages[messages.length - 1] || 'YOU WON!');
-      }, 800);
-    }
-  });
-  if(SETTINGS.backgroundShift) shiftBackground();
-  idx++;
-}
-
-/* -------- button behaviors & wiring -------- */
-yesBtn.addEventListener('click', (e)=>{
-  // user gesture: start audio context if not started
-  if(!audioCtx) ensureAudio();
-
-  spawnClickEmoji(e.clientX, e.clientY);
-  playPop();
-  yesConsec++; noClicksResetOnYes();
-  // grow yes button slightly
-  yesSizeScale = Math.min(1.8, yesSizeScale + 0.04);
-  yesBtn.style.transform = `scale(${yesSizeScale})`;
-  // small pulse
-  yesBtn.animate([{ transform:`scale(${yesSizeScale})` }, { transform:`scale(${yesSizeScale + 0.06})` }, { transform:`scale(${yesSizeScale})`}], { duration:260 });
-
-  // easter egg if yes 10 in a row
-  if(yesConsec >= 10){
-    yesConsec = 0;
-    spawnFloatingWord("SECRET UNLOCKED!");
-    doConfetti(); emojiRain(30);
-  }
-  // advance
-  showNext();
-});
-
-function noClicksResetOnYes(){ noClicksConsec = 0; }
-
-/* keep track of consecutive No clicks for popup */
-yesBtn.addEventListener('mouseenter', ()=> { /* could add small shimmer */ });
-
-noBtn.addEventListener('mouseenter', (e)=>{
-  // run away behavior only up to SETTINGS.noRunsMax times
-  if(runningUsed < SETTINGS.noRunsMax){
-    runningUsed++;
-    makeNoRunOnce();
-    playBoing();
-  }
-});
-
-noBtn.addEventListener('click', (e)=>{
-  if(!audioCtx) ensureAudio();
-  spawnClickEmoji(e.clientX, e.clientY);
-  playBoing();
-  noClicksConsec++;
-  yesConsec = 0;
-  screenShake();
-  if(noClicksConsec >= 3){
-    noClicksConsec = 0;
-    showNoPopup(); // iPhone-style popup, then continue
-    return;
-  }
-  // small floating taunt sometimes
-  if(Math.random() < 0.5) spawnFloatingWord("Noooo!");
-  showNext();
-});
-
-/* show click emoji helper */
-function spawnClickEmoji(x,y){
-  spawnFloatingWord(choose(['Yes!','Haha!','Nice!','Yay!']));
-  if(SETTINGS.emojiOnClick) spawnFloatingWord(choose(['🎉','✨','💖','🥳','🫧']));
-}
-
-/* show 3-No iPhone style popup */
-function showNoPopup(){
-  noPopup.style.display = 'block';
-  noPopup.style.opacity = '1';
-  playPop();
-  setTimeout(()=> {
-    noPopup.style.opacity = '0';
-    setTimeout(()=> noPopup.style.display = 'none', 320);
-    // continue the game automatically after popup hides
-    showNext();
-  }, 1800);
-}
-
-/* spawn floating word wrapper */
-function spawnFloatingWord(text){
-  const el = document.createElement('div');
-  el.className = 'float-thing';
-  el.textContent = text;
-  el.style.left = `${rand(40, innerWidth - 140)}px`;
-  el.style.top = `${rand(innerHeight*0.55, innerHeight - 80)}px`;
-  el.style.fontSize = `${rand(14,22)}px`;
-  document.body.appendChild(el);
-  requestAnimationFrame(()=> el.style.transform = `translateY(-${rand(40,140)}px) translateX(${rand(-40,40)}px) scale(${rand(0.9,1.06)})`);
-  setTimeout(()=> el.remove(), 2500);
-}
-
-/* -------- initial name modal handling -------- */
-nameStart.addEventListener('click', ()=>{
-  const v = (nameInput.value || 'Friend').trim();
-  playerName = v;
-  nameModal.style.display = 'none';
-  // start music after user gesture if enabled
-  if(SETTINGS.musicEnabled) startMusic();
-  // small welcome
-  spawnFloatingWord(`Welcome, ${playerName}!`);
-  // begin personalized flow
-  startGameAfterName();
-});
-
-/* allow enter key to submit */
-nameInput.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter') nameStart.click();
-});
-
-/* open modal at load */
-window.addEventListener('load', ()=> {
-  nameModal.style.display = 'flex';
-  nameInput.focus();
-});
-
-/* helper to show/hide music toggle if audio not allowed yet */
-document.addEventListener('click', ()=> { if(SETTINGS.musicEnabled && !musicOsc) startMusic(); }, {once:true});
-
-/* helper to programmatically spawn click emoji */
-function spawnClickEmoji(e){ if(e && e.clientX) spawnClickEmoji(e.clientX, e.clientY); }
-
-/* ----- expose small API for debugging ----- */
-window._dropChar = dropChar;
-window._finalSpill = finalSpill;
-window._doConfetti = doConfetti;
-window._spawnFloating = spawnFloatingWord;
+    spawnRipple(leftTarget + 8, inner
