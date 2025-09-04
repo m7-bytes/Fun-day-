@@ -1,132 +1,132 @@
-:root{
-  --card-w: 760px;
-  --accent: #00e6ff;
-  --yes: #2ecc71;
-  --no: #ff6b6b;
-  --glass: rgba(255,255,255,0.06);
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #0f172a, #0f3753);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* page & animated gradient background */
-html,body{ height:100%; margin:0; }
-body{
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(120deg,#0f2027 0%, #203a43 50%, #2c5364 100%);
-  animation: bgShift 18s linear infinite;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-@keyframes bgShift {
-  0%{ background-position:0% 50%;}
-  50%{ background-position:100% 50%;}
-  100%{ background-position:0% 50%;}
+#card {
+  text-align: center;
+  margin-top: 15vh;
 }
 
-/* app card */
-#card{
-  width:min(var(--card-w), 94vw);
-  padding:28px;
-  border-radius:16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.02);
-  text-align:center;
-  color:#fff;
-  position:relative;
-  z-index:40;
-  transform-style:preserve-3d;
+#message {
+  font-size: 24px;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
 }
 
-/* message style (clean, readable) */
-#message{
-  font-size: clamp(1.1rem, 2.6vw, 1.7rem);
-  line-height:1.25;
-  min-height:96px;
-  display:flex; align-items:center; justify-content:center;
-  padding: 6px 10px;
-  transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms;
-  will-change: transform, opacity;
-  color: #ffffff;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.5);
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-/* pop class */
-#message.pop{ transform: translateY(-8px) scale(1.02); }
-
-/* hint & controls */
-#hint{ margin-top:12px; color:rgba(255,255,255,0.65); font-size:0.92rem; }
-#controls{ margin-top:18px; display:flex; justify-content:center; gap:18px; align-items:center; }
-
-/* choice buttons */
-.choice{
-  min-width:120px;
-  padding:12px 16px;
-  border-radius:12px;
-  border:none;
-  font-weight:700;
-  font-size:1.05rem;
-  cursor:pointer;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.35);
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 200ms;
-}
-.choice:active{ transform: translateY(2px); }
-#yesBtn{ background: linear-gradient(90deg,var(--yes), #23c76a); color:white; }
-#noBtn{ background: linear-gradient(90deg,#ff6b6b, #ff4d6d); color:white; }
-
-.choice:hover{ transform: translateY(-6px) scale(1.02); filter:brightness(1.05); }
-
-/* music toggle */
-#musicToggle{
-  position:absolute; right:18px; top:18px; font-size:1.1rem; cursor:pointer; opacity:0.85;
-  background:rgba(255,255,255,0.04); padding:8px 10px; border-radius:10px; color:#fff;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-/* float emojis and words */
-.float-thing{
-  position:fixed; pointer-events:none; z-index:30; font-size:1.2rem; opacity:0.98;
-  transform-origin:center; will-change: transform, top;
+#yesBtn { background-color: #4CAF50; color: #fff; }
+#noBtn  { background-color: #f44336; color: #fff; }
+
+button:hover { transform: scale(1.05); }
+
+/* Floating things (emojis/words) */
+.float-thing {
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+  font-size: 20px;
+  z-index: 999;
+  will-change: transform;
 }
 
-/* no-popup (iPhone style) */
-.no-popup{
-  position: fixed; left:50%; transform:translateX(-50%); top:22px;
-  background: rgba(0,0,0,0.9); color:#fff; padding:12px 18px; border-radius:14px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6); font-weight:600; display:none; z-index:60;
+/* Falling letters */
+.falling-letter {
+  position: fixed;
+  font-weight: bold;
+  font-size: 24px;
+  z-index: 999;
 }
 
-/* name modal (iPhone style) */
-.modal{
-  position:fixed; inset:0; display:flex; align-items:flex-start; justify-content:center;
-  background: rgba(0,0,0,0.35); padding-top:12vh; z-index:60;
-}
-.modal-card{
-  width: min(420px, 92vw); background: #fff; color:#111; border-radius:14px;
-  padding:18px 18px 16px; box-shadow: 0 18px 60px rgba(0,0,0,0.5); text-align:center;
-}
-.modal-title{ font-size:1.05rem; margin-bottom:10px; font-weight:700; }
-.modal-card input{
-  width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ddd; font-size:1rem;
-  margin-bottom:12px;
-}
-.modal-actions{ display:flex; justify-content:center; gap:12px; }
-.modal-actions button{
-  padding:9px 14px; border-radius:10px; border:none; cursor:pointer; background:#007aff; color:white; font-weight:700;
-  box-shadow: 0 8px 22px rgba(0,122,255,0.18);
+/* Name modal */
+#nameModal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
 }
 
-/* ripple canvas sits behind letters */
-#rippleCanvas{ position:fixed; left:0; top:0; width:100vw; height:100vh; pointer-events:none; z-index:20; }
-
-/* falling letters style (final) */
-.falling-letter{
-  position:fixed; z-index:35; font-size:1.8rem; pointer-events:none;
-  text-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  user-select:none;
+#nameModalBox {
+  background: #fff;
+  color: #000;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
 }
 
-/* small responsive tweaks */
-@media (max-width:520px){
-  #message{ font-size:1.05rem; min-height:72px; }
-  .choice{ min-width:100px; padding:10px 12px; }
+#nameModal input {
+  padding: 10px;
+  font-size: 16px;
+  width: 180px;
+  margin-top: 10px;
+}
+
+#nameModal button {
+  margin-top: 15px;
+  padding: 8px 16px;
+}
+
+/* iPhone-style popup */
+#noPopup {
+  position: fixed;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 270px;
+  padding: 12px 16px;
+  background: #f0f0f0;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  color: #000;
+  text-align: center;
+  z-index: 9999;
+  transition: top 0.5s ease;
+}
+#noPopup.show { top: 20px; }
+
+/* Ripple canvas */
+#rippleCanvas {
+  position: fixed;
+  top:0; left:0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Music toggle */
+#musicToggle {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  padding: 8px 14px;
+  font-size: 20px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
 }
