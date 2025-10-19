@@ -1,132 +1,111 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #0f172a, #0f3753);
-  color: #fff;
-  overflow-x: hidden;
-  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #111 0%, #000 80%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: white;
+  overflow: hidden;
 }
 
-#card {
+.container {
   text-align: center;
-  margin-top: 15vh;
+  z-index: 2;
 }
 
-#message {
-  font-size: 24px;
-  margin-bottom: 20px;
-  transition: transform 0.3s;
+.question {
+  font-size: 2em;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
 }
 
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
 }
 
-button {
-  padding: 12px 24px;
-  font-size: 18px;
+.btn {
+  padding: 12px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-size: 1.2em;
   cursor: pointer;
-  transition: transform 0.2s;
+  background: #444;
+  color: white;
+  transition: all 0.2s ease;
 }
 
-#yesBtn { background-color: #4CAF50; color: #fff; }
-#noBtn  { background-color: #f44336; color: #fff; }
-
-button:hover { transform: scale(1.05); }
-
-/* Floating things (emojis/words) */
-.float-thing {
-  position: fixed;
-  pointer-events: none;
-  user-select: none;
-  font-size: 20px;
-  z-index: 999;
-  will-change: transform;
+.btn:hover {
+  transform: scale(1.08);
+  background: #666;
 }
 
-/* Falling letters */
-.falling-letter {
-  position: fixed;
-  font-weight: bold;
-  font-size: 24px;
-  z-index: 999;
+.btn.yes {
+  background: #2ecc71;
 }
 
-/* Name modal */
-#nameModal {
+.btn.no {
+  background: #e74c3c;
+}
+
+/* iOS-style alert */
+.ios-alert {
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 10000;
+  align-items: center;
+  z-index: 5;
 }
 
-#nameModalBox {
-  background: #fff;
-  color: #000;
-  padding: 30px;
-  border-radius: 14px;
+.ios-alert.hidden {
+  display: none;
+}
+
+.alert-box {
+  background: rgba(30, 30, 30, 0.9);
+  border-radius: 16px;
+  padding: 20px;
+  width: 80%;
+  max-width: 340px;
   text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: pop 0.3s ease-out;
 }
 
-#nameModal input {
-  padding: 10px;
-  font-size: 16px;
-  width: 180px;
-  margin-top: 10px;
+@keyframes pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-#nameModal button {
+.alert-buttons {
+  display: flex;
+  justify-content: space-between;
   margin-top: 15px;
-  padding: 8px 16px;
 }
 
-/* iPhone-style popup */
-#noPopup {
-  position: fixed;
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 270px;
-  padding: 12px 16px;
-  background: #f0f0f0;
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  color: #000;
-  text-align: center;
-  z-index: 9999;
-  transition: top 0.5s ease;
-}
-#noPopup.show { top: 20px; }
-
-/* Ripple canvas */
-#rippleCanvas {
-  position: fixed;
-  top:0; left:0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Music toggle */
-#musicToggle {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  padding: 8px 14px;
-  font-size: 20px;
-  border-radius: 50%;
-  background: #000;
-  color: #fff;
+.alert-buttons button {
+  background: none;
   border: none;
+  color: #007aff;
+  font-size: 1.1em;
+  padding: 8px 16px;
   cursor: pointer;
-  z-index: 9999;
+}
+
+#nameInput {
+  width: 90%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  font-size: 1em;
 }
